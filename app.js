@@ -12,7 +12,7 @@ http.listen(8080, err => {
     }
 });
 //połączenia webowe 
-server.listen(443, err => {
+server.listen(process.env.PORT || 80, err => {
     if(err)
         console.log(err);
     else{
