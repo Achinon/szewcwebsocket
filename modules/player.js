@@ -1,9 +1,12 @@
 const Player = class {
     points = 0;
+    nick = null;
+    color = null;
 
-    constructor(nick, color, socket){
-        this.nick = nick;
-        this.color = color;
+
+    constructor(socket){
         this.socket = socket;
     }
 }
+
+module.exports = Player

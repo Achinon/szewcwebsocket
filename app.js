@@ -1,17 +1,21 @@
-const server = require('express')(),
-    https = require('https').createServer(server),
-    io = require('socket.io')(https),
-    Games = require('./modules/game');
+const fs = require('fs'), https = require('http'), Games = require('./modules/game'), Player = require('./modules/player');
+file = fs.readFileSync("test.html");
 
-// server(server.json());
-https.listen(8080, () => console.log('Powitanie'));
+server = https.createServer((req, res) => {
+    res.end(file)
+});
 
+const io = require('socket.io')(server, { allowEIO3: true });
 
 io.on('connection', socket => {
-    Games.find()
+    const player = new Player(socket);
 
-    socket.on('joined the game', json => {
-        const player = new Player(json);
+    socket.on('joined the game', name => {
+        player.nick = name;
+        Games.join(player)
     });
 })
 
+server.listen(3000, _ => {
+    console.log("Powitanie");
+})

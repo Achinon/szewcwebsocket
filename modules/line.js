@@ -1,0 +1,3 @@
+class Line {
+    owner = null;
+}

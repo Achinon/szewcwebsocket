@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+<h1>test</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.slim.js"></script>
+<button id="hujmniestrzeli">Click</button>
+<script>
+    const socket = io();
+
+    socket.on('connect', () => {
+        console.log("connection");
+        socket.on("game started", data => {
+            console.log(data);
+        })
+    });
+    function click() {
+        console.log("XD")
+        socket.emit('joined the game', 'name')
+    }
+    document.getElementById("hujmniestrzeli").addEventListener('click', click)
+</script>
+</body>
+</html>
