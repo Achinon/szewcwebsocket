@@ -3,20 +3,12 @@ const server = require('express')(),
     io = require('socket.io')(http),
     Games = require('./modules/game');
 
-//połączenia socketowe
-http.listen(8080, err => {
+//heroku lub sobie zmieniać ten port i musi być ta zmienna do tego
+http.listen(process.env.PORT || 8080, err => {
     if(err)
         console.log(err);
     else{
         console.log('HTTPS running...')
-    }
-});
-//połączenia webowe 
-server.listen(process.env.PORT || 80, err => {
-    if(err)
-        console.log(err);
-    else{
-        console.log('Express running...')
     }
 });
 
