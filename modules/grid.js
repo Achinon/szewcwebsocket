@@ -1,5 +1,0 @@
-const Grid = class {
-    constructor(){
-        
-    }
-}
