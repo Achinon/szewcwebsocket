@@ -13,7 +13,7 @@ http.listen(process.env.PORT || 8080, err => {
 });
 
 io.on('connection', socket => {
-    socket.emit('connection established', 'Connected to socket.io...');
+    socket.emit('chat message', 'Connected to socket.io...');
 
     socket.on('joined the game', json => {
         const player = new Player(json);
@@ -21,3 +21,4 @@ io.on('connection', socket => {
 })
 
 server.use('/', require('./routes/index'));
+server.use('/client', require('./routes/client'));

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body { 
+        margin: 0; 
+        padding: 0; 
+        font-family: Roboto, Arial
+      }
+      div { 
+        background: rgba(75, 75, 75, 0.15);
+        padding: 1vh;
+        position: fixed;
+        bottom: 0;
+        display: flex; 
+        height: 5vh; width: 100%;  
+      }
+      input { 
+        border: none; 
+        padding: 0 1%;
+        width: 85%; 
+        margin: 0.25rem; 
+      }
+      button { 
+        background: white; 
+        color: black;
+        border: none; 
+        padding: 0 1%; 
+        margin: 0.25rem; 
+        border-radius: 3px; 
+        width: 10%;
+      }
+
+      ul { 
+        list-style-type: none; margin: 0; padding: 0; 
+      }
+      ul > li { 
+        color: black;
+        padding: 0.5rem 1rem; 
+      }
+
+    </style>
+  </head>
+  <body>
+    <ul></ul>
+    <div>
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('localhost:8080')
+
+        const textbox = document.querySelector('ul');
+        const button = document.querySelector("button");
+        const input = document.querySelector("input")
+
+        button.addEventListener('click', () => {
+            if(input.value != ""){
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', (string) => {
+            console.log(string)
+            const li = document.createElement('li');
+            li.innerHTML = string;
+            textbox.appendChild(li);
+        });
+    </script>
+  </body>
+</html>
