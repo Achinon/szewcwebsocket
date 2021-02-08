@@ -1,10 +1,10 @@
 const server = require('express')(),
-    https = require('https').createServer(server),
-    io = require('socket.io')(https),
+    http = require('http').createServer(server),
+    io = require('socket.io')(http),
     Games = require('./modules/game');
 
 //połączenia socketowe
-https.listen(8080, err => {
+http.listen(8080, err => {
     if(err)
         console.log(err);
     else{
@@ -12,7 +12,7 @@ https.listen(8080, err => {
     }
 });
 //połączenia webowe 
-server.listen(443, err => {
+server.listen(80, err => {
     if(err)
         console.log(err);
     else{
