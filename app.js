@@ -12,7 +12,7 @@ http.listen(8080, err => {
     }
 });
 //połączenia webowe 
-server.listen(80, err => {
+server.listen(443, err => {
     if(err)
         console.log(err);
     else{
