@@ -45,7 +45,7 @@ const Games = {
     start(game){
         let i = 0;
         console.log('game started');
-        for (const player in this.players) {
+        for (const [key, player] of game.players) {
             player.color = i++;
             player.socket.on("move", data => {
                 game.sendToPlayers("move", data)
@@ -56,12 +56,12 @@ const Games = {
         }
         players = []
         game.players.forEach((key, player) => {
-            players.push(key.nick);
+            players.push({nick: key.nick, color: key.color, });
         })
 
         game.sendToPlayers("game started", JSON.stringify({grid: game.grid, players: players}))
         console.log(game.players.values())
-
+        this.games.splice(this.games.indexOf(game), 1);
         //jakaś logika związana z ruszeniem z kopyta gry
         return game;
     }

@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.slim.js"></script>
 <button id="testButton">Click</button>
 <script>
-    const socket = io();
+    const socket = io("http://172.21.9.65:3000");
 
     socket.on('connect', () => {
         console.log("connection");

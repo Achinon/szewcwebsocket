@@ -9,6 +9,7 @@ const io = require('socket.io')(server, { allowEIO3: true });
 
 io.on('connection', socket => {
     const player = new Player(socket);
+    console.log("connected");
 
     socket.on('joined the game', name => {
         player.nick = name;
