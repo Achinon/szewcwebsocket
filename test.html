@@ -7,7 +7,7 @@
 <body>
 <h1>test</h1>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.slim.js"></script>
-<button id="hujmniestrzeli">Click</button>
+<button id="testButton">Click</button>
 <script>
     const socket = io();
 
@@ -18,10 +18,10 @@
         })
     });
     function click() {
-        console.log("XD")
+        console.log("Sending name to server")
         socket.emit('joined the game', 'name')
     }
-    document.getElementById("hujmniestrzeli").addEventListener('click', click)
+    document.getElementById("testButton").addEventListener('click', click)
 </script>
 </body>
 </html>

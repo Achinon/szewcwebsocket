@@ -1,3 +1,6 @@
+const Line = require('./line')
+const Cell = require('./cell')
+
 const Grid = class {
     constructor(){
         this.vertical = []
@@ -14,3 +17,5 @@ const Grid = class {
         }
     }
 }
+
+module.exports = Grid

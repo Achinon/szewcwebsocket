@@ -21,7 +21,7 @@ const Games = {
         //obiekt przechowywany w this.games
         const game = {
             players: new Map(),
-            grid: new require('./grid').constructor(),
+            grid: new (require('./grid'))(),
             turn: 0,
             offsetTurn: 0,
             addPlayer(player){
@@ -54,9 +54,13 @@ const Games = {
                 }
             });
         }
+        players = []
+        game.players.forEach((key, player) => {
+            players.push(key.nick);
+        })
 
-        game.sendToPlayers("game started", JSON.stringify({grid: game.grid, players: game.players}))
-
+        game.sendToPlayers("game started", JSON.stringify({grid: game.grid, players: players}))
+        console.log(game.players.values())
 
         //jakaś logika związana z ruszeniem z kopyta gry
         return game;
