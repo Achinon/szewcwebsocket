@@ -7,21 +7,32 @@
 <body>
 <h1>test</h1>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.slim.js"></script>
-<button id="testButton">Click</button>
+<button id="testButton">Click</button><br>
+<input id="vertical" type="text"><input id="horizontal" type="text"><button id="send">send</button>
 <script>
-    const socket = io("http://172.21.9.65:3000");
+    const socket = io("http://172.21.9.60:3000");
 
     socket.on('connect', () => {
         console.log("connection");
-        socket.on("game started", data => {
+        socket.on("start", data => {
             console.log(data);
         })
     });
+    socket.on("move", data => {
+        console.log(data)
+    })
     function click() {
         console.log("Sending name to server")
-        socket.emit('joined the game', 'name')
+        socket.emit('login', 'name')
     }
     document.getElementById("testButton").addEventListener('click', click)
+    document.getElementById("send").addEventListener('click', _ => {
+        const x = document.getElementById('vertical').value
+        const y = document.getElementById('horizontal').value
+const ssss = x + ";" + y
+console.log(ssss)
+        socket.emit('move', ssss)
+    })
 </script>
 </body>
 </html>

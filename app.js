@@ -11,7 +11,7 @@ io.on('connection', socket => {
     const player = new Player(socket);
     console.log("connected");
 
-    socket.on('joined the game', name => {
+    socket.on('login', name => {
         player.nick = name;
         Games.join(player)
     });

@@ -24,7 +24,10 @@ const Games = {
             grid: new (require('./grid'))(),
             turn: 0,
             offsetTurn: 0,
+            colors: [-16776961, -65536, -256, -16711936],
             addPlayer(player){
+                player.color = this.colors[this.players.size]
+                player.socket.emit('color', player.color)
                 this.players.set(player.socket.id, player);
             },
             sendToPlayers(type, data) {
@@ -43,25 +46,23 @@ const Games = {
         return game;
     },
     start(game){
-        let i = 0;
         console.log('game started');
         for (const [key, player] of game.players) {
-            player.color = i++;
             player.socket.on("move", data => {
                 game.sendToPlayers("move", data)
-                if(game.checkEnd(JSON.parse(data))) {
-                    game.sendToPlayers("end", null);
+                if(game.checkEnd(data)) {
+                    //game.sendToPlayers("end", null);
+                    console.log("END")
                 }
             });
         }
         players = []
         game.players.forEach((key, player) => {
-            players.push({nick: key.nick, color: key.color, });
+            players.push({ nick: key.nick, color: key.color });
         })
 
-        game.sendToPlayers("game started", JSON.stringify({grid: game.grid, players: players}))
-        console.log(game.players.values())
-        this.games.splice(this.games.indexOf(game), 1);
+        game.sendToPlayers("start", JSON.stringify(players))
+        //this.games.splice(this.games.indexOf(game), 1);
         //jakaś logika związana z ruszeniem z kopyta gry
         return game;
     }
