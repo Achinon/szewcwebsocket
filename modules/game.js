@@ -24,7 +24,7 @@ const Games = {
             grid: new (require('./grid'))(),
             turn: 0,
             offsetTurn: 0,
-            colors: [-16776961, -65536, -256, -16711936],
+            colors: [-998351, -15143486, -256, -16711936],
             points: 0,
             addPlayer(player){
                 player.color = this.colors[this.players.size]
