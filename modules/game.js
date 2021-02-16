@@ -136,6 +136,7 @@ const Games = {
         return game;
     },
     end(game) {
+        this.games.splice(this.games.indexOf(game), 1);
         game.sendToPlayers("end", null);
         console.log("END");
     },
