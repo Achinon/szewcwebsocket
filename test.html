@@ -10,7 +10,7 @@
 <button id="testButton">Click</button><br>
 <input id="vertical" type="text"><input id="horizontal" type="text"><button id="send">send</button>
 <script>
-    const socket = io("http://172.21.9.60:3000");
+    const socket = io("http://172.21.9.65:3000");
 
     socket.on('connect', () => {
         console.log("connection");

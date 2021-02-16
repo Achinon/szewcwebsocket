@@ -25,6 +25,7 @@ const Games = {
             turn: 0,
             offsetTurn: 0,
             colors: [-16776961, -65536, -256, -16711936],
+            points: 0,
             addPlayer(player){
                 player.color = this.colors[this.players.size]
                 player.socket.emit('color', player.color)
@@ -35,24 +36,84 @@ const Games = {
                     player.socket.emit(type, data);
                 }
             },
-            checkEnd(grid){
-                console.log("trzeba napisać");
-                return false;
-            }
+            checkEnd(grid) {
+                return (
+                    grid.vertical
+                        .map(({ owner }) => owner)
+                        .every((owner) => owner !== null) &&
+                    grid.horizontal
+                        .map(({ owner }) => owner)
+                        .every((owner) => owner !== null)
+                );
+            },
         }
         game.addPlayer(player);
         this.games.push(game);
-
         return game;
+    },
+    calculateClosedCells(game, currentPlayerIndex) {
+        const gridSize = 3;
+        const vertical = game.grid.vertical
+        const horizontal = game.grid.horizontal
+        let doubleCellPlayer = null
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (vertical[i * gridSize + j].owner == null || vertical[(i + 1) * gridSize + j].owner == null ||
+                    horizontal[j * gridSize + i].owner == null || horizontal[(j + 1) * gridSize + i].owner == null
+                ) continue
+
+                if (game.grid.cells[i * gridSize + j].owner == null) {
+                    if (doubleCellPlayer == null) {
+                        game.offsetCounter += game.players.size - 1
+                        const player = game.players.get(currentPlayerIndex)
+                        game.grid.cells[i * gridSize + j].owner = player
+                        player.points++
+                        doubleCellPlayer = player
+                    } else {
+                        game.grid.cells[i * gridSize + j].owner = doubleCellPlayer
+                        doubleCellPlayer.points++
+                    }
+                }
+            }
+        }
     },
     start(game){
         console.log('game started');
         for (const [key, player] of game.players) {
             player.socket.on("move", data => {
-                game.sendToPlayers("move", data)
-                if(game.checkEnd(data)) {
-                    //game.sendToPlayers("end", null);
-                    console.log("END")
+                const [d, v] = data.split(';')
+                const direction = parseInt(d);
+                const value = parseInt(v);
+                if (direction && value && (direction === 0 || direction === 1) && (value >= 0 && value <= 11)) {
+                    game.sendToPlayers("move", data)
+                    if (direction === 0) {
+                        const line = game.grid.vertical[value]
+                        if (line.owner === null) {
+                            line.owner = player
+                            this.calculateClosedCells(game, key)
+                        } else {
+                            console.log("line occupied")
+                            player.socket.emit("line occupied")
+                        }
+                    } else if (direction === 1) {
+                        const line = game.grid.horizontal[value]
+                        if (line.owner === null ) {
+                            line.owner = player
+                            this.calculateClosedCells(game, key)
+                        } else {
+                            console.log("line occupied")
+                            player.socket.emit("line occupied")
+                        }
+                    } else {
+                        console.log("Wrong move")
+                        player.socket.emit("wrong move")
+                    }
+                } else {
+                    console.log("Wrong move")
+                    player.socket.emit("wrong move")
+                }
+                if(game.checkEnd(game.grid)) {
+                    this.end(game)
                 }
             });
         }
@@ -65,7 +126,12 @@ const Games = {
         //this.games.splice(this.games.indexOf(game), 1);
         //jakaś logika związana z ruszeniem z kopyta gry
         return game;
-    }
+    },
+    end(game) {
+        game.sendToPlayers("end", null);
+        console.log(game)
+        console.log("END");
+    },
 }
 
 module.exports = Games;
