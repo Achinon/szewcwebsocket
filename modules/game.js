@@ -31,11 +31,11 @@ const Games = {
                 player.socket.emit('color', player.color)
                 this.players.set(player.socket.id, player);
                 player.socket.on("disconnect", e => {
-                    for (const [key, player] of game.players) {
+                    for (const [key, player] of this.players) {
                         player.socket.disconnect()
                     }
                     console.error("Rozłączono")
-                    this.end(game);
+                    Games.end(this);
                 });
             },
             sendToPlayers(type, data) {
@@ -136,9 +136,11 @@ const Games = {
         return game;
     },
     end(game) {
-        this.games.splice(this.games.indexOf(game), 1);
-        game.sendToPlayers("end", null);
-        console.log("END");
+        if(this.games.indexOf(game) !== -1) {
+            this.games.splice(this.games.indexOf(game), 1);
+            game.sendToPlayers("end", null);
+            console.log("END");
+        }
     },
 }
 
