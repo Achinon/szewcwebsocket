@@ -31,12 +31,12 @@ const Games = {
                 player.socket.emit('color', player.color)
                 this.players.set(player.socket.id, player);
                 player.socket.on("disconnect", e => {
-                for (const [key, player] of game.players) {
-                    player.socket.disconnect()
-                }
-                console.error("Rozłączono")
-                this.end(game);
-            });
+                    for (const [key, player] of game.players) {
+                        player.socket.disconnect()
+                    }
+                    console.error("Rozłączono")
+                    this.end(game);
+                });
             },
             sendToPlayers(type, data) {
                 for (const [key, player] of this.players) {
