@@ -30,6 +30,13 @@ const Games = {
                 player.color = this.colors[this.players.size]
                 player.socket.emit('color', player.color)
                 this.players.set(player.socket.id, player);
+                player.socket.on("disconnect", e => {
+                for (const [key, player] of game.players) {
+                    player.socket.disconnect()
+                }
+                console.error("Rozłączono")
+                this.end(game);
+            });
             },
             sendToPlayers(type, data) {
                 for (const [key, player] of this.players) {
@@ -116,13 +123,6 @@ const Games = {
                 if(game.checkEnd(game.grid)) {
                     this.end(game)
                 }
-            });
-            player.socket.on("disconnect", e => {
-                for (const [key, player] of game.players) {
-                    player.socket.disconnect()
-                }
-                console.error("Błąd")
-                this.end(game);
             });
         }
         players = []
