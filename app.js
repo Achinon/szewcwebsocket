@@ -1,4 +1,4 @@
-const fs = require('fs'), https = require('http'), Games = require('./modules/game'), Player = require('./modules/player');
+const fs = require('fs'), https = require('https'), Games = require('./modules/game'), Player = require('./modules/player');
 file = fs.readFileSync("test.html");
 
 server = https.createServer((req, res) => {
