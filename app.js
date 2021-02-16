@@ -17,6 +17,6 @@ io.on('connection', socket => {
     });
 })
 
-server.listen(3000, _ => {
+server.listen(process.env.PORT || 3000, _ => {
     console.log("Powitanie");
 })
