@@ -84,13 +84,13 @@ const Games = {
                 const [d, v] = data.split(';')
                 const direction = parseInt(d);
                 const value = parseInt(v);
-                if (direction && value && (direction === 0 || direction === 1) && (value >= 0 && value <= 11)) {
-                    game.sendToPlayers("move", data)
+                if (direction !== null && value !== null && (value >= 0 && value <= 11)) {
                     if (direction === 0) {
                         const line = game.grid.vertical[value]
                         if (line.owner === null) {
                             line.owner = player
                             this.calculateClosedCells(game, key)
+                            game.sendToPlayers("move", data)
                         } else {
                             console.log("line occupied")
                             player.socket.emit("line occupied")
@@ -100,6 +100,7 @@ const Games = {
                         if (line.owner === null ) {
                             line.owner = player
                             this.calculateClosedCells(game, key)
+                            game.sendToPlayers("move", data)
                         } else {
                             console.log("line occupied")
                             player.socket.emit("line occupied")
@@ -116,6 +117,13 @@ const Games = {
                     this.end(game)
                 }
             });
+            player.socket.on("disconnect", e => {
+                for (const [key, player] of game.players) {
+                    player.socket.disconnect()
+                }
+                console.error("Błąd")
+                this.end(game);
+            });
         }
         players = []
         game.players.forEach((key, player) => {
@@ -129,7 +137,6 @@ const Games = {
     },
     end(game) {
         game.sendToPlayers("end", null);
-        console.log(game)
         console.log("END");
     },
 }
